@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+BookShelf
 
-## Getting Started
 
-First, run the development server:
+🚀 Pré-requisitos
 
-```bash
+Node.js 
+
+npm ou yarn
+
+Git
+
+📦 Começando
+
+Clone o repositório:
+
+git clone https://github.com/TabitaCosta/BookShelf.git
+cd BookShelf
+
+
+Instale as dependências:
+
+npm install
+# ou
+yarn install
+
+
+Rodar o projeto localmente:
+
 npm run dev
-# or
+# ou
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Acesse em http://localhost:3000.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+🔧 Comandos úteis
 
-## Learn More
+npm run build → build de produção
 
-To learn more about Next.js, take a look at the following resources:
+npm run lint → verifica lint
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+npm run format → formata o código
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+npm run test → roda testes (se houver)
 
-## Deploy on Vercel
+🤝 Contribuindo
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Crie uma branch para sua feature:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+git checkout -b feature/nome-da-feature
+
+
+Faça commits claros e suba a branch:
+
+git add .
+git commit -m "Descrição do que foi feito"
+git push origin feature/nome-da-feature
+
+
+Abra um Pull Request.
