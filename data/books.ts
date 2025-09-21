@@ -20,8 +20,10 @@ export const books: Book[] = [
     genre: "Literatura Brasileira",
     year: 1899,
     rating: 5,
-    cover:
-      "https://livrariacultura.vteximg.com.br/arquivos/ids/148153238-292-292/58469.jpg?v=638144271180800000",
+    pages: 432,
+    synopsis: "Bentinho, o narrador, conta a história de seu amor por Capitu e a dúvida sobre a fidelidade dela.",
+    status: "LIDO",
+    cover: "https://livrariacultura.vteximg.com.br/arquivos/ids/148153238-292-292/58469.jpg?v=638144271180800000",
   },
 
   // Ficção Científica
@@ -32,8 +34,10 @@ export const books: Book[] = [
     genre: "Ficção Científica",
     year: 1984,
     rating: 4,
-    cover:
-      "https://livrariacultura.vteximg.com.br/arquivos/ids/149479003-292-292/46334505.jpg?v=638156076595170000",
+    pages: 271,
+    synopsis: "Case, um hacker, é recrutado para um trabalho de alta tecnologia no futuro, com realidades virtuais e inteligência artificial.",
+    status: "LIDO",
+    cover: "https://livrariacultura.vteximg.com.br/arquivos/ids/149479003-292-292/46334505.jpg?v=638156076595170000",
   },
 
   // Realismo Mágico
@@ -44,8 +48,10 @@ export const books: Book[] = [
     genre: "Realismo Mágico",
     year: 1967,
     rating: 5,
-    cover:
-      "https://livrariacultura.vteximg.com.br/arquivos/ids/148152697-1000-1000/53042.jpg?v=638144270541170000",
+    pages: 448,
+    synopsis: "A história da família Buendía, na cidade fictícia de Macondo, misturando elementos mágicos com a realidade.",
+    status: "LIDO",
+    cover: "https://livrariacultura.vteximg.com.br/arquivos/ids/148152697-1000-1000/53042.jpg?v=638144270541170000",
   },
 
   // Ficção
@@ -56,8 +62,10 @@ export const books: Book[] = [
     genre: "Ficção",
     year: 1942,
     rating: 4,
-    cover:
-      "https://livrariacultura.vteximg.com.br/arquivos/ids/150884821-300-300/156646.jpg?v=638168116947370000", // sem capa → fallback
+    pages: 160,
+    synopsis: "Meursault, o protagonista, vive uma vida indiferente até cometer um assassinato sem motivo claro.",
+    status: "LIDO",
+    cover: "https://livrariacultura.vteximg.com.br/arquivos/ids/150884821-300-300/156646.jpg?v=638168116947370000", // sem capa → fallback
   },
 
   // Fantasia
@@ -68,8 +76,10 @@ export const books: Book[] = [
     genre: "Fantasia",
     year: 1954,
     rating: 5,
-    cover:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGo0DqLMMFiGmOUFVT8YrIfo7q--wjGmI_dQ&s",
+    pages: 1216,
+    synopsis: "A épica jornada de Frodo Baggins, que deve destruir o Anel do Poder para salvar a Terra-média.",
+    status: "LIDO",
+    cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGo0DqLMMFiGmOUFVT8YrIfo7q--wjGmI_dQ&s",
   },
 
   // Romance
@@ -80,8 +90,10 @@ export const books: Book[] = [
     genre: "Romance",
     year: 1813,
     rating: 5,
-    cover:
-      "https://livrariacultura.vteximg.com.br/arquivos/ids/153286818-300-300/2112313579.jpg?v=638193183207470000",
+    pages: 432,
+    synopsis: "A história de Elizabeth Bennet e sua relação com o orgulhoso Mr. Darcy.",
+    status: "LIDO",
+    cover: "https://livrariacultura.vteximg.com.br/arquivos/ids/153286818-300-300/2112313579.jpg?v=638193183207470000",
   },
 
   // Biografia
@@ -92,8 +104,10 @@ export const books: Book[] = [
     genre: "Biografia",
     year: 2011,
     rating: 5,
-    cover:
-      "https://livrariacultura.vteximg.com.br/arquivos/ids/151563159-1000-1000/2112329868.jpg?v=638181061222200000",
+    pages: 656,
+    synopsis: "A biografia do fundador da Apple, Steve Jobs, escrita por Walter Isaacson.",
+    status: "LENDO",
+    cover: "https://livrariacultura.vteximg.com.br/arquivos/ids/151563159-1000-1000/2112329868.jpg?v=638181061222200000",
   },
 
   // História
@@ -104,8 +118,10 @@ export const books: Book[] = [
     genre: "História",
     year: 2011,
     rating: 5,
-    cover:
-      "https://livrariacultura.vteximg.com.br/arquivos/ids/156526093-1000-1000/2112366453.jpg?v=638872968300100000",
+    pages: 512,
+    synopsis: "Uma análise da história da humanidade desde os primeiros seres humanos até o presente.",
+    status: "LIDO",
+    cover: "https://livrariacultura.vteximg.com.br/arquivos/ids/156526093-1000-1000/2112366453.jpg?v=638872968300100000",
   },
 
   // Autoajuda
@@ -116,8 +132,10 @@ export const books: Book[] = [
     genre: "Autoajuda",
     year: 2012,
     rating: 4,
-    cover:
-      "https://livrariacultura.vteximg.com.br/arquivos/ids/150261323-300-300/30351365.jpg?v=638163805465000000",
+    pages: 371,
+    synopsis: "Como os hábitos são formados e como podem ser mudados para melhorar a vida pessoal e profissional.",
+    status: "LENDO",
+    cover: "https://livrariacultura.vteximg.com.br/arquivos/ids/150261323-300-300/30351365.jpg?v=638163805465000000",
   },
 
   // Tecnologia
@@ -128,8 +146,10 @@ export const books: Book[] = [
     genre: "Tecnologia",
     year: 2014,
     rating: 4,
-    cover:
-      "https://livrariacultura.vteximg.com.br/arquivos/ids/154383299-292-292/2010447109.jpg?v=638200208079630000",
+    pages: 560,
+    synopsis: "A história dos pioneiros da revolução digital, incluindo Alan Turing e Bill Gates.",
+    status: "LIDO",
+    cover: "https://livrariacultura.vteximg.com.br/arquivos/ids/154383299-292-292/2010447109.jpg?v=638200208079630000",
   },
 
   // Programação
@@ -140,8 +160,10 @@ export const books: Book[] = [
     genre: "Programação",
     year: 2008,
     rating: 5,
-    cover:
-      "https://livrariacultura.vteximg.com.br/arquivos/ids/148174238-1000-1000/29802936.jpg?v=638144289804100000",
+    pages: 431,
+    synopsis: "O livro ensina boas práticas para escrever código limpo e legível.",
+    status: "LIDO",
+    cover: "https://livrariacultura.vteximg.com.br/arquivos/ids/148174238-1000-1000/29802936.jpg?v=638144289804100000",
   },
 
   {
@@ -151,6 +173,9 @@ export const books: Book[] = [
     genre: "Programação",
     year: 1994,
     rating: 5,
+    pages: 395,
+    synopsis: "Os padrões de design de software mais usados, ajudando desenvolvedores a escrever código reutilizável e modular.",
+    status: "LENDO",
     cover: "https://m.media-amazon.com/images/I/51nL96Abi1L._SY445_SX342_.jpg",
   },
 
@@ -162,8 +187,10 @@ export const books: Book[] = [
     genre: "Negócios",
     year: 2005,
     rating: 4,
-    cover:
-      "https://livrariacultura.vteximg.com.br/arquivos/ids/148193200-300-300/2111985333.jpg?v=638144322202700000",
+    pages: 256,
+    synopsis: "Como criar novos espaços de mercado e tornar a concorrência irrelevante.",
+    status: "QUERO_LER",
+    cover: "https://livrariacultura.vteximg.com.br/arquivos/ids/148193200-300-300/2111985333.jpg?v=638144322202700000",
   },
 
   // Psicologia
@@ -174,8 +201,10 @@ export const books: Book[] = [
     genre: "Psicologia",
     year: 2011,
     rating: 5,
-    cover:
-      "https://livrariacultura.vteximg.com.br/arquivos/ids/151187264-300-300/30142671.jpg?v=638173521006830000",
+    pages: 499,
+    synopsis: "Como nossas mentes funcionam e como o pensamento rápido e lento afeta nossas decisões.",
+    status: "LIDO",
+    cover: "https://livrariacultura.vteximg.com.br/arquivos/ids/151187264-300-300/30142671.jpg?v=638173521006830000",
   },
 
   // Filosofia
@@ -186,8 +215,10 @@ export const books: Book[] = [
     genre: "Filosofia",
     year: -380,
     rating: 5,
-    cover:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQs1K1HliA4i3lHAVuwmmgHUo1pITK2-6k9RQ&s",
+    pages: 448,
+    synopsis: "Platão descreve a ideia de justiça e o funcionamento ideal da sociedade.",
+    status: "LIDO",
+    cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQs1K1HliA4i3lHAVuwmmgHUo1pITK2-6k9RQ&s",
   },
 
   // Poesia
@@ -198,8 +229,10 @@ export const books: Book[] = [
     genre: "Poesia",
     year: 1857,
     rating: 4,
-    cover:
-      "https://livrariacultura.vteximg.com.br/arquivos/ids/148171437-300-300/29444339.jpg?v=638144287486930000",
+    pages: 222,
+    synopsis: "Uma coleção de poemas que explora o tema do sofrimento e da busca pela beleza.",
+    status: "LIDO",
+    cover: "https://livrariacultura.vteximg.com.br/arquivos/ids/148171437-300-300/29444339.jpg?v=638144287486930000",
   },
 
   {
@@ -209,9 +242,12 @@ export const books: Book[] = [
     genre: "Ficção",
     year: 1995,
     rating: 5,
-    cover:
-      "https://livrariacultura.vteximg.com.br/arquivos/ids/150910056-300-300/2112266061.jpg?v=638168973393330000",
+    pages: 400,
+    synopsis: "Em uma cidade, todos ficam cegos e a sociedade entra em colapso.",
+    status: "LIDO",
+    cover: "https://livrariacultura.vteximg.com.br/arquivos/ids/150910056-300-300/2112266061.jpg?v=638168973393330000",
   },
+
   {
     id: "18",
     title: "Harry Potter e a Pedra Filosofal",
@@ -219,9 +255,12 @@ export const books: Book[] = [
     genre: "Fantasia",
     year: 1997,
     rating: 5,
-    cover:
-      "https://livrariacultura.vteximg.com.br/arquivos/ids/153141245-300-300/46583624.jpg?v=638192283269800000",
+    pages: 223,
+    synopsis: "Harry Potter descobre que é um bruxo e começa sua jornada na escola de magia de Hogwarts.",
+    status: "LIDO",
+    cover: "https://livrariacultura.vteximg.com.br/arquivos/ids/153141245-300-300/46583624.jpg?v=638192283269800000",
   },
+
   {
     id: "19",
     title: "O Alquimista",
@@ -229,9 +268,12 @@ export const books: Book[] = [
     genre: "Romance",
     year: 1988,
     rating: 4,
-    cover:
-      "https://livrariacultura.vteximg.com.br/arquivos/ids/148183165-300-300/46567899.jpg?v=638144306343500000",
+    pages: 208,
+    synopsis: "A história de Santiago, um jovem pastor que parte em busca de um tesouro, descobrindo os segredos da vida.",
+    status: "PAUSADO",
+    cover: "https://livrariacultura.vteximg.com.br/arquivos/ids/148183165-300-300/46567899.jpg?v=638144306343500000",
   },
+
   {
     id: "20",
     title: "Mindset: A Nova Psicologia do Sucesso",
@@ -239,7 +281,9 @@ export const books: Book[] = [
     genre: "Psicologia",
     year: 2006,
     rating: 4,
-    cover:
-      "https://livrariacultura.vteximg.com.br/arquivos/ids/148181713-300-300/46439767.jpg?v=638144304369500000",
+    pages: 320,
+    synopsis: "Como o mindset pode impactar nossas vidas e determinar nosso sucesso ou fracasso.",
+    status: "QUERO_LER",
+    cover: "https://livrariacultura.vteximg.com.br/arquivos/ids/148181713-300-300/46439767.jpg?v=638144304369500000",
   },
 ];
