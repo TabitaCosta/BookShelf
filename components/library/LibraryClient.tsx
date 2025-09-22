@@ -1,6 +1,6 @@
 // components/library/LibraryClient.tsx
 "use client";
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import BookCard from "./BookCard";
 import { books as initialBooks, type Book } from "../../data/books";
 
@@ -8,6 +8,22 @@ export default function LibraryClient() {
   const [items, setItems] = useState<Book[]>(initialBooks);
   const [search, setSearch] = useState("");
   const [genre, setGenre] = useState("Todos");
+
+  useEffect(() => {
+    const stored = localStorage.getItem("books");
+    let allBooks: Book[] = [];
+
+    if (stored) {
+      const localBooks = JSON.parse(stored) as Book[];
+      const ids = new Set(localBooks.map(b => b.id));
+      const mockBooks = initialBooks.filter(b => !ids.has(b.id));
+      allBooks = [...localBooks, ...mockBooks];
+    } else {
+      allBooks = initialBooks;
+    }
+
+    setItems(allBooks);
+  }, []);
 
   const genres = useMemo(() => {
     const g = Array.from(

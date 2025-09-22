@@ -14,7 +14,7 @@ export default function QuickNav() {
         Ver todos os livros
       </button>
       <button
-        onClick={() => router.push("/library/add")}
+        onClick={() => router.push("/add")}
         className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
       >
         Adicionar livro

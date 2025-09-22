@@ -2,6 +2,7 @@
 "use client";
 import React from "react";
 import type { Book } from "../../data/books";
+import { useRouter } from "next/navigation";
 
 type Props = {
   book: Book;
@@ -9,6 +10,7 @@ type Props = {
 };
 
 export default function BookCard({ book, onDelete }: Props) {
+  const router = useRouter();
   const imgSrc =
     book.cover && book.cover.trim() !== "" ? book.cover : "/default-cover.png";
 
@@ -45,18 +47,20 @@ export default function BookCard({ book, onDelete }: Props) {
       </div>
 
       <div className="mt-4 flex gap-2">
-        <a
-          href={`/library/${book.id}`}
+        <button
+          type="button"
+          onClick={() => router.push(`/library/${book.id}`)}
           className="flex-1 text-center px-3 py-2 rounded bg-gray-200 hover:bg-gray-300 text-sm"
         >
           Ver
-        </a>
-        <a
-          href={`/library/edit/${book.id}`}
+        </button>
+        <button
+          type="button"
+          onClick={() => router.push(`/edit/${book.id}`)}
           className="flex-1 text-center px-3 py-2 rounded bg-yellow-200 hover:bg-yellow-300 text-sm"
         >
           Editar
-        </a>
+        </button>
         <button
           type="button"
           onClick={() => {
