@@ -49,7 +49,7 @@ export default function BookCard({ book, onDelete }: Props) {
       <div className="mt-4 flex gap-2">
         <button
           type="button"
-          onClick={() => router.push(`/library/${book.id}`)}
+          onClick={() => router.push(`/books/${book.id}`)}
           className="flex-1 text-center px-3 py-2 rounded bg-gray-200 hover:bg-gray-300 text-sm"
         >
           Ver

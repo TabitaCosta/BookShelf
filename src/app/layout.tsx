@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { BookProvider } from "@/context/BookContext"; // <-- import do provider
-
+import { Toaster } from "@/components/ui/sonner";
+import { BookProvider } from "@/context/BookContext";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -29,6 +29,7 @@ export default function RootLayout({
         <BookProvider>
           {children}
         </BookProvider>
+        <Toaster />
       </body>
     </html>
   );
