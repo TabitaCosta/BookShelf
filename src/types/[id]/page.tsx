@@ -1,0 +1,51 @@
+import { getBookById } from "@/data/books";
+
+interface BookDetailsPageProps {
+  params: {
+    id: string;
+  };
+}
+
+export default function BookDetailsPage({ params }: BookDetailsPageProps) {
+  const bookId = params.id;
+  const book = getBookById(bookId);
+
+  if (!book) {
+    return <div className="p-6">Livro não encontrado.</div>;
+  }
+
+  return (
+    <div className="p-6 max-w-4xl mx-auto">
+      <div className="flex gap-6">
+        <img
+          src={book.coverUrl || "/fallback-cover.png"}
+          alt={book.title}
+          className="w-48 h-72 object-cover rounded-md shadow-md"
+        />
+
+        <div>
+          <h1 className="text-2xl font-bold">{book.title}</h1>
+          <p className="text-gray-600">por {book.author}</p>
+          <p className="mt-2">
+            <span className="font-semibold">Gênero:</span> {book.genre}
+          </p>
+          <p>
+            <span className="font-semibold">Ano:</span> {book.year}
+          </p>
+          <p>
+            <span className="font-semibold">Páginas:</span> {book.pages}
+          </p>
+          <p className="mt-2">
+            <span className="font-semibold">Avaliação:</span>{" "}
+            {book.rating.toFixed(1)} ⭐
+          </p>
+        </div>
+      </div>
+
+      <div className="mt-6">
+        <h2 className="text-xl font-semibold mb-2">Sinopse</h2>
+        <p className="text-gray-700">{book.synopsis}</p>
+      </div>
+    </div>
+  );
+}
