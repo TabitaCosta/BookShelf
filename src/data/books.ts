@@ -1,4 +1,4 @@
-import type { Book } from "@/types/book";
+import type { Book } from "@/app/books/book"
 
 export const initialBooks: Book[] = [
   {
@@ -16,8 +16,54 @@ export const initialBooks: Book[] = [
     status: "LIDO",
     isbn: "978-85-XXX-XXXX",
   },
-];
+]
 
 export function getBookById(id: string): Book | undefined {
-  return initialBooks.find((b) => b.id === id);
+  return initialBooks.find((b) => b.id === id)
+}
+
+interface DashboardStats {
+  totalLivros: number
+  emLeitura: number
+  finalizados: number
+  paginasLidas: number
+}
+
+export async function getDashboardStats(): Promise<DashboardStats> {
+  const livros = initialBooks
+  const totalLivros = livros.length
+  const emLeitura = livros.filter((l) => l.status === "LENDO").length
+  const finalizados = livros.filter((l) => l.status === "LIDO").length
+  const paginasLidas = 0
+
+  return {
+    totalLivros,
+    emLeitura,
+    finalizados,
+    paginasLidas,
+  }
+}
+
+export async function getBooks(filters?: {
+  searchTerm?: string
+  filterGenre?: string
+}): Promise<Book[]> {
+  let currentBooks = initialBooks
+
+  if (filters?.searchTerm) {
+    const term = filters.searchTerm.toLowerCase()
+    currentBooks = currentBooks.filter(
+      (book) =>
+        book.title.toLowerCase().includes(term) ||
+        book.author.toLowerCase().includes(term)
+    )
+  }
+
+  if (filters?.filterGenre && filters.filterGenre !== "TODOS") {
+    currentBooks = currentBooks.filter(
+      (book) => book.genre === filters.filterGenre
+    )
+  }
+
+  return currentBooks
 }
