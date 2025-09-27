@@ -1,15 +1,15 @@
-"use client";
+"use client"
 
-import { useState, useEffect } from "react";
-import { useRouter, usePathname } from "next/navigation";
-import { Book } from "@/data/books";
+import { useState, useEffect } from "react"
+import { useRouter, usePathname } from "next/navigation"
+import { Book } from "@/data/books"
 
 export default function EditBookPage() {
-  const router = useRouter();
-  const pathname = usePathname();
-  const id = pathname.split("/").pop(); 
+  const router = useRouter()
+  const pathname = usePathname()
+  const id = pathname.split("/").pop()
 
-  const [booksList, setBooksList] = useState<Book[]>([]);
+  const [booksList, setBooksList] = useState<Book[]>([])
   const [form, setForm] = useState<Partial<Book>>({
     title: "",
     author: "",
@@ -20,50 +20,55 @@ export default function EditBookPage() {
     synopsis: "",
     cover: "",
     status: "QUERO_LER",
-  });
+  })
 
   useEffect(() => {
-    const stored = localStorage.getItem("books");
-    const books: Book[] = stored ? JSON.parse(stored) : [];
-    setBooksList(books);
-  }, []);
+    const stored = localStorage.getItem("books")
+    const books: Book[] = stored ? JSON.parse(stored) : []
+    setBooksList(books)
+  }, [])
 
   useEffect(() => {
-    if (!booksList.length || !id) return;
-    const book = booksList.find((b) => b.id === id);
-    if (book) setForm(book);
-  }, [booksList, id]);
+    if (!booksList.length || !id) return
+    const book = booksList.find((b) => b.id === id)
+    if (book) setForm(book)
+  }, [booksList, id])
 
-  const genres = Array.from(new Set(booksList.map((b) => b.genre)));
+  const genres = Array.from(new Set(booksList.map((b) => b.genre)))
   const statuses: Book["status"][] = [
     "QUERO_LER",
     "LENDO",
     "LIDO",
     "PAUSADO",
     "ABANDONADO",
-  ];
+  ]
 
   const handleChange = (field: keyof Book, value: any) =>
-    setForm((prev) => ({ ...prev, [field]: value }));
+    setForm((prev) => ({ ...prev, [field]: value }))
 
   const isValid =
-    form.title && form.author && form.genre && form.year && form.rating && form.status;
+    form.title &&
+    form.author &&
+    form.genre &&
+    form.year &&
+    form.rating &&
+    form.status
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!isValid || !id) return;
+    e.preventDefault()
+    if (!isValid || !id) return
 
     const updatedBooks = booksList.map((b) =>
       b.id === id
         ? { ...b, ...form, year: Number(form.year), rating: form.rating! }
         : b
-    );
+    )
 
-    setBooksList(updatedBooks);
-    localStorage.setItem("books", JSON.stringify(updatedBooks));
+    setBooksList(updatedBooks)
+    localStorage.setItem("books", JSON.stringify(updatedBooks))
 
-    router.push("/library");
-  };
+    router.push("/library")
+  }
 
   return (
     <div className="max-w-2xl mx-auto p-6">
@@ -177,12 +182,14 @@ export default function EditBookPage() {
           type="submit"
           disabled={!isValid}
           className={`px-4 py-2 rounded text-white ${
-            isValid ? "bg-blue-600 hover:bg-blue-700" : "bg-gray-400 cursor-not-allowed"
+            isValid
+              ? "bg-blue-600 hover:bg-blue-700"
+              : "bg-gray-400 cursor-not-allowed"
           }`}
         >
           Salvar Alterações
         </button>
       </form>
     </div>
-  );
+  )
 }

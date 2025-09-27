@@ -1,9 +1,9 @@
-"use client";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { Book, books } from "@/data/books"; 
+"use client"
+import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
+import { Book, books } from "@/data/books"
 
-const genres = Array.from(new Set(books.map((b) => b.genre)));
+const genres = Array.from(new Set(books.map((b) => b.genre)))
 
 const statuses: Book["status"][] = [
   "QUERO_LER",
@@ -11,10 +11,10 @@ const statuses: Book["status"][] = [
   "LIDO",
   "PAUSADO",
   "ABANDONADO",
-];
+]
 
 export default function AddBookPage() {
-  const router = useRouter();
+  const router = useRouter()
 
   const [form, setForm] = useState<Partial<Book>>({
     title: "",
@@ -26,24 +26,23 @@ export default function AddBookPage() {
     synopsis: "",
     cover: "",
     status: "QUERO_LER",
-  });
+  })
 
-  const [booksList, setBooksList] = useState<Book[]>([]);
-
+  const [booksList, setBooksList] = useState<Book[]>([])
 
   useEffect(() => {
-    const stored = localStorage.getItem("books");
+    const stored = localStorage.getItem("books")
     if (stored) {
-      setBooksList(JSON.parse(stored));
+      setBooksList(JSON.parse(stored))
     } else {
-      localStorage.setItem("books", JSON.stringify(books));
-      setBooksList(books);
+      localStorage.setItem("books", JSON.stringify(books))
+      setBooksList(books)
     }
-  }, []);
+  }, [])
 
   const handleChange = (field: keyof Book, value: any) => {
-    setForm((prev) => ({ ...prev, [field]: value }));
-  };
+    setForm((prev) => ({ ...prev, [field]: value }))
+  }
 
   const isValid =
     form.title &&
@@ -51,11 +50,11 @@ export default function AddBookPage() {
     form.genre &&
     form.year &&
     form.rating &&
-    form.status;
+    form.status
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!isValid) return;
+    e.preventDefault()
+    if (!isValid) return
 
     const newBook: Book = {
       id: crypto.randomUUID(),
@@ -68,18 +67,18 @@ export default function AddBookPage() {
       synopsis: form.synopsis,
       cover: form.cover,
       status: form.status!,
-    };
+    }
 
-    const updatedBooks = [...booksList, newBook];
+    const updatedBooks = [...booksList, newBook]
 
-    localStorage.setItem("books", JSON.stringify(updatedBooks));
+    localStorage.setItem("books", JSON.stringify(updatedBooks))
 
-    setBooksList(updatedBooks);
+    setBooksList(updatedBooks)
 
-    console.log("Livro salvo:", newBook);
+    console.log("Livro salvo:", newBook)
 
-    router.push("/library");
-  };
+    router.push("/library")
+  }
 
   return (
     <div className="max-w-2xl mx-auto p-6">
@@ -151,7 +150,9 @@ export default function AddBookPage() {
 
         <select
           value={form.status}
-          onChange={(e) => handleChange("status", e.target.value as Book["status"])}
+          onChange={(e) =>
+            handleChange("status", e.target.value as Book["status"])
+          }
           className="w-full border p-2 rounded"
           required
         >
@@ -191,12 +192,14 @@ export default function AddBookPage() {
           type="submit"
           disabled={!isValid}
           className={`px-4 py-2 rounded text-white ${
-            isValid ? "bg-blue-600 hover:bg-blue-700" : "bg-gray-400 cursor-not-allowed"
+            isValid
+              ? "bg-blue-600 hover:bg-blue-700"
+              : "bg-gray-400 cursor-not-allowed"
           }`}
         >
           Salvar
         </button>
       </form>
     </div>
-  );
+  )
 }

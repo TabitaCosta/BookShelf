@@ -1,24 +1,24 @@
-import { getBookById } from "@/data/books";
+import { getBookById } from "@/data/books"
 
 interface BookDetailsPageProps {
   params: {
-    id: string;
-  };
+    id: string
+  }
 }
 
 export default function BookDetailsPage({ params }: BookDetailsPageProps) {
-  const bookId = params.id;
-  const book = getBookById(bookId);
+  const bookId = params.id
+  const book = getBookById(bookId)
 
   if (!book) {
-    return <div className="p-6">Livro não encontrado.</div>;
+    return <div className="p-6">Livro não encontrado.</div>
   }
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
       <div className="flex gap-6">
         <img
-          src={book.coverUrl || "/fallback-cover.png"}
+          src={book.cover || "/fallback-cover.png"}
           alt={book.title}
           className="w-48 h-72 object-cover rounded-md shadow-md"
         />
@@ -47,5 +47,5 @@ export default function BookDetailsPage({ params }: BookDetailsPageProps) {
         <p className="text-gray-700">{book.synopsis}</p>
       </div>
     </div>
-  );
+  )
 }
