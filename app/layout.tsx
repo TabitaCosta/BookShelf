@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { BookProvider } from "@/context/BookContext"; // <-- import do provider
+import { Toaster } from "react-hot-toast";
+// import { BookProvider } from "@/context/BookContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,10 +26,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <BookProvider>
-          {children}
-        </BookProvider>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <Toaster position="top-right" />
+        {/* <BookProvider> */}
+        {children}
+        {/* </BookProvider> */}
       </body>
     </html>
   );
