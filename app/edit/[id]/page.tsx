@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter, usePathname } from "next/navigation"
-import { Book } from "@/data/books"
+import { Book } from "data/books"
 
 export default function EditBookPage() {
   const router = useRouter()
@@ -13,7 +13,7 @@ export default function EditBookPage() {
   const [form, setForm] = useState<Partial<Book>>({
     title: "",
     author: "",
-    genre: "",
+    genreId: "",
     year: new Date().getFullYear(),
     pages: undefined,
     rating: 0,
@@ -34,7 +34,7 @@ export default function EditBookPage() {
     if (book) setForm(book)
   }, [booksList, id])
 
-  const genres = Array.from(new Set(booksList.map((b) => b.genre)))
+  const genres = Array.from(new Set(booksList.map((b) => b.genreId)))
   const statuses: Book["status"][] = [
     "QUERO_LER",
     "LENDO",
@@ -49,7 +49,7 @@ export default function EditBookPage() {
   const isValid =
     form.title &&
     form.author &&
-    form.genre &&
+    form.genreId &&
     form.year &&
     form.rating &&
     form.status
@@ -94,8 +94,8 @@ export default function EditBookPage() {
         />
 
         <select
-          value={form.genre}
-          onChange={(e) => handleChange("genre", e.target.value)}
+          value={form.genreId}
+          onChange={(e) => handleChange("genreId", e.target.value)}
           className="w-full border p-2 rounded"
           required
         >
