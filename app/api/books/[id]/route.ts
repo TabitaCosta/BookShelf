@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { books } from "@/data/books"
+import { books } from "data/books"
 
 // GET - Retornar livro por ID
 export async function GET(

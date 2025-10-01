@@ -1,9 +1,9 @@
 "use client"
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { Book, books } from "@/data/books"
+import { Book, books } from "data/books"
 
-const genres = Array.from(new Set(books.map((b) => b.genre)))
+const genres = Array.from(new Set(books.map((b) => b.genreId)))
 
 const statuses: Book["status"][] = [
   "QUERO_LER",
@@ -19,7 +19,7 @@ export default function AddBookPage() {
   const [form, setForm] = useState<Partial<Book>>({
     title: "",
     author: "",
-    genre: "",
+    genreId: "",
     year: new Date().getFullYear(),
     pages: undefined,
     rating: 0,
@@ -47,7 +47,7 @@ export default function AddBookPage() {
   const isValid =
     form.title &&
     form.author &&
-    form.genre &&
+    form.genreId &&
     form.year &&
     form.rating &&
     form.status
@@ -60,7 +60,7 @@ export default function AddBookPage() {
       id: crypto.randomUUID(),
       title: form.title!,
       author: form.author!,
-      genre: form.genre!,
+      genreId: form.genreId!,
       year: Number(form.year),
       pages: form.pages,
       rating: form.rating!,
@@ -104,8 +104,8 @@ export default function AddBookPage() {
         />
 
         <select
-          value={form.genre}
-          onChange={(e) => handleChange("genre", e.target.value)}
+          value={form.genreId}
+          onChange={(e) => handleChange("genreId", e.target.value)}
           className="w-full border p-2 rounded"
           required
         >

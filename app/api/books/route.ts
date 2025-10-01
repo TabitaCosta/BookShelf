@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { randomUUID } from "crypto"
-import { books, Book } from "@/data/books"
+import { books, Book } from "data/books"
 
 function searchBooks(query: string) {
   return books.filter(

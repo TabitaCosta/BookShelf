@@ -33,7 +33,7 @@ export default function BookCard({ book, onDelete }: Props) {
 
         <div className="mt-2">
           <span className="inline-block text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded">
-            {book.genre}
+            {book.genreId}
           </span>
         </div>
 
