@@ -88,3 +88,71 @@ Essa API permite gerenciar uma lista de livros, incluindo funcionalidades para b
 | Parâmetro   | Tipo       | Descrição                                   |
 | :---------- | :--------- | :------------------------------------------ |
 | `id`      | `string` | **Obrigatório**. Id do livro a ser excluído |
+
+#### Retorna todos os gêneros
+
+```http
+  GET /api/genres
+```
+
+#### Retorna um gênero pelo id
+
+```http
+  GET /api/genres/id
+```
+
+| Parâmetro   | Tipo       | Descrição                                   |
+| :---------- | :--------- | :------------------------------------------ |
+| `id`      | `string` | **Obrigatório**. O ID do gênero que você quer |
+
+#### Retorna todos os livros de um gênero
+
+```http
+  GET /api/books/genres/id
+```
+
+| Parâmetro   | Tipo       | Descrição                                   |
+| :---------- | :--------- | :------------------------------------------ |
+| `id`      | `string` | **Obrigatório**. O ID do gênero que você quer |
+
+#### Adiciona um novo gênero
+
+```http
+  POST /api/genres
+```
+
+| Parâmetro JSON  | Tipo       | Descrição                                   |
+| :---------- | :--------- | :------------------------------------------ |
+| `name`      | `string` | **Obrigatório**. Nome do gênero |
+
+```bash
+  {
+    "name": "Infantil"
+  }
+```
+
+#### Atualiza um gênero
+
+```http
+  PUT /api/genres/id
+```
+
+| Parâmetro   | Tipo       | Descrição                                   |
+| :---------- | :--------- | :------------------------------------------ |
+| `id`      | `string` | **Obrigatório**. Id do gênero a ser atualizado |
+
+```bash
+  {
+    "name": "Biologia"
+  } 
+```
+
+#### Exclui um gênero
+
+```http
+  DELETE /api/genres/id
+```
+
+| Parâmetro   | Tipo       | Descrição                                   |
+| :---------- | :--------- | :------------------------------------------ |
+| `id`      | `string` | **Obrigatório**. Id do gênero a ser excluído |
