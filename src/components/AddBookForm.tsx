@@ -1,51 +1,60 @@
+"use server"
 
-'use client';
+import { revalidatePath } from "next/cache"
+import { redirect } from "next/navigation"
+import { z } from "zod"
+import { createBook } from "@/data/books"
 
-import type { Genre } from '@prisma/client';
-import { createBookAction } from '@/actions/bookActions';
+const formSchema = z.object({
+  title: z.string().min(1, "Título é obrigatório"),
+  author: z.string().min(1, "Autor é obrigatório"),
+  genreId: z.string().min(1, "Gênero é obrigatório"),
+  year: z.coerce.number(),
+  pages: z.coerce.number().optional().nullable(),
+  rating: z.coerce.number().min(0).max(5).optional().nullable(),
+  synopsis: z.string().optional().nullable(),
+  cover: z.string().url("URL da capa inválida").optional().or(z.literal("")).nullable(),
+  status: z.enum(["QUERO_LER", "LENDO", "LIDO", "PAUSADO", "ABANDONADO"]),
+  isbn: z.string().optional().nullable(),
+  notes: z.string().optional().nullable(),
+  currentPage: z.coerce.number().optional().nullable(),
+})
 
-export function AddBookForm({ genres }: { genres: Genre[] }) {
-  
-  const statuses = [
-    'QUERO_LER', 'LENDO', 'LIDO', 'PAUSADO', 'ABANDONADO'
-  ] as const;
 
-  return (
-    <div className="max-w-2xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-6">Adicionar Livro</h1>
+export async function createBookAction(prevState: any, formData: FormData) {
+  const values = Object.fromEntries(formData.entries())
 
-      <form action={createBookAction} className="space-y-4">
-        <input name="title" placeholder="Título" required className="w-full border p-2 rounded" />
-        <input name="author" placeholder="Autor" required className="w-full border p-2 rounded" />
+  const processedValues = {
+    ...values,
+    pages: values.pages || null,
+    rating: values.rating || null,
+    synopsis: values.synopsis || null,
+    cover: values.cover || null,
+  }
 
-        <select name="genreId" required className="w-full border p-2 rounded">
-          <option value="">Selecione um gênero</option>
-          {genres.map((g) => (
-            <option key={g.id} value={g.id}>
-              {g.name}
-            </option>
-          ))}
-        </select>
-        
-        <input name="year" type="number" placeholder="Ano de Publicação" defaultValue={new Date().getFullYear()} required className="w-full border p-2 rounded" />
-        <input name="pages" type="number" placeholder="Nº de páginas" className="w-full border p-2 rounded" />
-        <input name="rating" type="number" placeholder="Nota (0-5)" defaultValue={0} min={0} max={5} className="w-full border p-2 rounded" />
-        <input name="cover" type="url" placeholder="URL da capa" className="w-full border p-2 rounded" />
+  const validatedFields = formSchema.safeParse(processedValues)
 
-        <select name="status" defaultValue="QUERO_LER" required className="w-full border p-2 rounded">
-          {statuses.map((s) => (
-            <option key={s} value={s}>
-              {s}
-            </option>
-          ))}
-        </select>
-        
-        <textarea name="synopsis" placeholder="Sinopse" rows={4} className="w-full border p-2 rounded" />
-        
-        <button type="submit" className="px-4 py-2 rounded text-white bg-blue-600 hover:bg-blue-700">
-          Salvar Livro
-        </button>
-      </form>
-    </div>
-  );
+  if (!validatedFields.success) {
+    console.error(validatedFields.error.flatten().fieldErrors)
+    return { error: "Dados inválidos. Verifique os campos e tente novamente." }
+  }
+
+  const { genreId, ...bookData } = validatedFields.data;
+
+  try {
+    await createBook({
+      ...bookData,
+      genre: {
+        connect: { id: Number(genreId) },
+      },
+    });
+  } catch (error) {
+    console.error(error)
+    return { error: "Ocorreu um erro ao salvar o livro no banco de dados." }
+  }
+
+  revalidatePath("/library")
+  redirect("/library")
 }
+
+

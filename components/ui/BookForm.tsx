@@ -3,6 +3,7 @@
 import React, { useState, useEffect, Fragment } from "react";
 import toast from "react-hot-toast";
 import { Dialog, Transition } from "@headlessui/react";
+import { createBook, updateBook, deleteBook } from "../../src/services/bookService";
 
 type BookData = {
   [key: string]: any;
@@ -93,43 +94,42 @@ export default function BookForm({ initialData }: BookFormProps) {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     if (!validate()) {
       toast.error("Por favor, corrija os erros antes de salvar.");
       return;
     }
 
     setIsSubmitting(true);
-    const promise = new Promise((resolve) => setTimeout(resolve, 2000));
-
-    toast.promise(promise, {
-      loading: "Salvando livro...",
-      success: `Livro ${isEditMode ? "atualizado" : "salvo"} com sucesso!`,
-      error: "Ocorreu um erro ao salvar.",
-    });
-
     try {
-      await promise;
+      if (isEditMode && initialData?.id) {
+        await updateBook(initialData.id, formData);
+        toast.success("Livro atualizado com sucesso!");
+      } else {
+        await createBook(formData);
+        toast.success("Livro salvo com sucesso!");
+      }
     } catch (error) {
+      console.error(error);
+      toast.error("Erro ao salvar livro.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
+
   const handleDelete = async () => {
     setIsModalOpen(false);
-    const promise = new Promise((resolve) => setTimeout(resolve, 1500));
-
-    toast.promise(promise, {
-      loading: "Excluindo livro...",
-      success: "Livro excluído com sucesso!",
-      error: "Não foi possível excluir o livro.",
-    });
-
     try {
-      await promise;
-      // Aqui entraria a lógica de redirecionar o usuário ou limpar o formulário
-    } catch (error) {}
+      if (initialData?.id) {
+        await deleteBook(initialData.id);
+        toast.success("Livro excluído com sucesso!");
+      }
+    } catch (error) {
+      toast.error("Erro ao excluir livro.");
+    }
   };
+
 
   return (
     <>

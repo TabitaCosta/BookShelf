@@ -1,8 +1,8 @@
-// components/library/BookCard.tsx
 "use client";
 import React from "react";
 import type { Book } from "../../data/books";
 import { useRouter } from "next/navigation";
+import { genres } from "@/data/genres"; // importando os gêneros
 
 type Props = {
   book: Book;
@@ -13,6 +13,9 @@ export default function BookCard({ book, onDelete }: Props) {
   const router = useRouter();
   const imgSrc =
     book.cover && book.cover.trim() !== "" ? book.cover : "/default-cover.png";
+
+  // Busca o nome do gênero pelo id
+  const genreName = genres.find((g) => g.id === book.genreId)?.name || "N/A";
 
   return (
     <article className="rounded-xl shadow-md p-4 bg-white flex flex-col hover:shadow-lg transition">
@@ -33,7 +36,7 @@ export default function BookCard({ book, onDelete }: Props) {
 
         <div className="mt-2">
           <span className="inline-block text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded">
-            {book.genreId}
+            {genreName}
           </span>
         </div>
 

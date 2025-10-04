@@ -203,11 +203,4 @@ export default function AddBookPage() {
     </div>
   )
 }
-import { AddBookForm } from '@/components/AddBookForm';
-import { getGenres } from '@/services/genreService';
 
-export default async function AddBookPage() {
-  const genres = await getGenres();
-
-  return <AddBookForm genres={genres} />;
-}

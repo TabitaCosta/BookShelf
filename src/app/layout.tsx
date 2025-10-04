@@ -1,29 +1,25 @@
-import type { Metadata } from "next"
-import { Geist, Geist_Mono } from "next/font/google"
-import "./globals.css"
-import { Toaster } from "@/components/ui/sonner"
-import { ThemeProvider } from "@/components/ThemeProvider"
-import Header from "@/components/Header"
+import type { Metadata } from 'next';
+import { GeistSans } from 'geist/font/sans';
+import { GeistMono } from 'geist/font/mono';
+import './globals.css';
+import { Toaster } from '@/components/ui/sonner';
+import { ThemeProvider } from '@/components/ThemeProvider';
+import Header from '@/components/Header';
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-})
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-})
+// Mantive a importação do Geist que já estava funcionando.
+// A que você colou "Geist" e "Geist_Mono" de "next/font/google" não é a padrão para essa fonte.
+const geistSans = GeistSans;
+const geistMono = GeistMono;
 
 export const metadata: Metadata = {
-  title: "Bookshelf | Sua Biblioteca Pessoal",
-  description: "Gerenciamento de livros e progresso de leitura.",
-}
+  title: 'Bookshelf | Sua Biblioteca Pessoal',
+  description: 'Gerenciamento de livros e progresso de leitura.',
+};
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
   return (
     <html lang="pt-BR" suppressHydrationWarning>
@@ -37,12 +33,10 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Header />
-
-          <main className="flex min-h-screen flex-col"></main>
-          {children}
+          <main className="flex min-h-screen flex-col">{children}</main>
           <Toaster />
         </ThemeProvider>
       </body>
     </html>
-  )
+  );
 }
