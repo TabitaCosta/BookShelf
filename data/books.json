@@ -1,0 +1,57 @@
+[
+  {
+    "id": "cllq8u271000008l5gq0z6d3h",
+    "title": "O Guia do Mochileiro das Galáxias",
+    "author": "Douglas Adams",
+    "genre": "Ficção Científica",
+    "year": 1979,
+    "pages": 208,
+    "rating": 5,
+    "synopsis": "A saga de Arthur Dent, um britânico que escapa da destruição da Terra com seu amigo Ford Prefect, um alienígena pesquisador para o Guia do Mochileiro das Galáxias.",
+    "cover": "https://images-na.ssl-images-amazon.com/images/I/81eI0522AAL.jpg"
+  },
+  {
+    "id": "cllq8v3p2000108l5h2f4e4c2",
+    "title": "Código Limpo",
+    "author": "Robert C. Martin",
+    "genre": "Programação",
+    "year": 2008,
+    "pages": 464,
+    "rating": 5,
+    "synopsis": "Mesmo um código ruim pode funcionar. Mas se ele não for limpo, pode acabar com uma empresa de desenvolvimento. Todos os anos, horas incontáveis e recursos significativos são perdidos por causa de um código mal escrito.",
+    "cover": "https://images-na.ssl-images-amazon.com/images/I/81gC-eI5RXL.jpg"
+  },
+  {
+    "id": "cllq8w9q4000208l5a0c3b3d1",
+    "title": "Dom Casmurro",
+    "author": "Machado de Assis",
+    "genre": "Literatura Brasileira",
+    "year": 1899,
+    "pages": 256,
+    "rating": 4,
+    "synopsis": "Um clássico da literatura brasileira que narra a história de Bentinho e Capitu, explorando temas como ciúme e a incerteza da verdade.",
+    "cover": "https://images-na.ssl-images-amazon.com/images/I/81y+F4a2B8L.jpg"
+  },
+  {
+    "id": "cllq8x5k7000308l5g9f8h7e0",
+    "title": "1984",
+    "author": "George Orwell",
+    "genre": "Ficção",
+    "year": 1949,
+    "pages": 328,
+    "rating": 5,
+    "synopsis": "Uma distopia sombria sobre um futuro totalitário onde o pensamento é controlado e a verdade é manipulada.",
+    "cover": "https://images-na.ssl-images-amazon.com/images/I/819js3EQwbL.jpg"
+  },
+  {
+    "id": "cllq8y1m9000408l5c2d6f6b9",
+    "title": "O Poder do Hábito",
+    "author": "Charles Duhigg",
+    "genre": "Autoajuda",
+    "year": 2012,
+    "pages": 416,
+    "rating": 4,
+    "synopsis": "Um exame fascinante sobre como os hábitos funcionam e como podemos mudá-los em nossas vidas, empresas e sociedades.",
+    "cover": "https://images-na.ssl-images-amazon.com/images/I/81s+j3v5+5L.jpg"
+  }
+]

@@ -1,45 +1,42 @@
-'use server';
+"use server";
 
-import { createBook } from '@/services/bookService';
-import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
-import { z } from 'zod';
+import { prisma } from "../lib/prisma";
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
+import { z } from "zod";
+import { createId } from "@paralleldrive/cuid2";
 
 const bookSchema = z.object({
-  title: z.string().min(1, 'Título é obrigatório'),
-  author: z.string().min(1, 'Autor é obrigatório'),
-  genreId: z.string().min(1, 'Gênero é obrigatório'),
-  year: z.coerce.number().min(1, 'Ano é obrigatório'),
-  pages: z.coerce.number().optional(),
-  rating: z.coerce.number().min(0).max(5),
+  title: z.string().trim().min(1),
+  author: z.string().trim().min(1),
+  genreId: z.preprocess(val => Number(val), z.number().positive()),
+  status: z.enum(["QUERO_LER","LENDO","LIDO","PAUSADO","ABANDONADO"]).default("QUERO_LER"),
+  year: z.string().optional().transform(v => v ? Number(v) : undefined),
+  pages: z.string().optional().transform(v => v ? Number(v) : undefined),
+  rating: z.string().optional().transform(v => v ? Number(v) : undefined),
+  cover: z.string().url().optional(),
   synopsis: z.string().optional(),
-  cover: z.string().url('URL da capa inválida').optional().or(z.literal('')),
-  status: z.enum(['QUERO_LER', 'LENDO', 'LIDO', 'PAUSADO', 'ABANDONADO']),
 });
 
 export async function createBookAction(formData: FormData) {
+  const validated = bookSchema.safeParse(Object.fromEntries(formData.entries()));
+  if (!validated.success) return { error: "Dados inválidos." };
 
-  const validatedFields = bookSchema.safeParse(Object.fromEntries(formData.entries()));
+  const { genreId, ...bookData } = validated.data;
 
-  if (!validatedFields.success) {
-    console.error(validatedFields.error.flatten().fieldErrors);
-    return { error: 'Dados inválidos. Verifique os campos.' };
-  }
-
-  const { genreId, ...bookData } = validatedFields.data;
-
-  try {
-    await createBook({
+  await prisma.book.create({
+    data: {
+      id: createId(),
       ...bookData,
-      genre: {
-        connect: { id: genreId }, 
-      },
-    });
-  } catch (error) {
-    console.error(error);
-    return { error: 'Ocorreu um erro ao salvar o livro no banco de dados.' };
-  }
+      genre: { connect: { id: genreId } },
+    },
+  });
 
-  revalidatePath('/library'); 
-  redirect('/library'); 
+  revalidatePath("/library");
+  redirect("/library");
+}
+
+export async function deleteBook(id: string) {
+  await prisma.book.delete({ where: { id } });
+  revalidatePath("/library");
 }

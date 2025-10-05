@@ -1,24 +1,47 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import { Book, PlusCircle } from 'lucide-react';
 
-export default function QuickNav() {
+interface QuickNavButtonProps {
+  label: string;
+  href?: string;
+  onClick?: () => void;
+  icon?: React.ReactNode;
+}
+
+function QuickNavButton({ label, href, onClick, icon }: QuickNavButtonProps) {
   const router = useRouter();
 
+  const handleClick = () => {
+    if (onClick) onClick();
+    else if (href) router.push(href);
+  };
+
   return (
-    <div className="flex gap-4 mt-4">
-      <button
-        onClick={() => router.push('/livros')}
-        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-      >
-        Ver todos os livros
-      </button>
-      <button
-        onClick={() => router.push('/adicionar')}
-        className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-      >
-        Adicionar livro
-      </button>
+    <button
+      onClick={handleClick}
+      className="flex items-center gap-2 px-4 py-2 border rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors"
+    >
+      {icon && <span className="w-5 h-5">{icon}</span>}
+      {label}
+    </button>
+  );
+}
+
+export default function QuickNav() {
+  return (
+    <div className="flex flex-wrap gap-3 mt-4">
+      <QuickNavButton
+        label="Ver todos os livros"
+        href="/library"
+        icon={<Book className="w-5 h-5" />}
+      />
+      <QuickNavButton
+        label="Adicionar livro"
+        href="/add"
+        icon={<PlusCircle className="w-5 h-5" />}
+      />
     </div>
   );
 }

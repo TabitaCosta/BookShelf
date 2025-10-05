@@ -1,3 +1,5 @@
+// prisma/schema.prisma
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -7,7 +9,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum ReadStatus {
+enum ReadingStatus {
   QUERO_LER
   LENDO
   LIDO
@@ -22,21 +24,18 @@ model Genre {
 }
 
 model Book {
-  id          Int        @id @default(autoincrement())
-  title       String
-  author      String
-  year        Int?
-  pages       Int?
-  rating      Float?
-  synopsis    String?
-  cover       String?
-  status      ReadStatus @default(QUERO_LER)
-  currentPage Int?
-  isbn        String?
-  notes       String?
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-
-  genreId Int?
-  genre   Genre?    @relation(fields: [genreId], references: [id])
+  id        String   @id @default(cuid())
+  title     String
+  author    String
+  year      Int?
+  pages     Int?
+  rating    Int?
+  synopsis  String?
+  cover     String?
+  genre     Genre    @relation(fields: [genreId], references: [id])
+  genreId   Int
+  status    ReadingStatus @default(QUERO_LER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
+

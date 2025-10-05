@@ -1,60 +1,122 @@
-"use server"
+"use client";
 
-import { revalidatePath } from "next/cache"
-import { redirect } from "next/navigation"
-import { z } from "zod"
-import { createBook } from "@/data/books"
+import { useState } from "react";
+import { createBookAction } from "@/src/actions/bookActions";
 
-const formSchema = z.object({
-  title: z.string().min(1, "Título é obrigatório"),
-  author: z.string().min(1, "Autor é obrigatório"),
-  genreId: z.string().min(1, "Gênero é obrigatório"),
-  year: z.coerce.number(),
-  pages: z.coerce.number().optional().nullable(),
-  rating: z.coerce.number().min(0).max(5).optional().nullable(),
-  synopsis: z.string().optional().nullable(),
-  cover: z.string().url("URL da capa inválida").optional().or(z.literal("")).nullable(),
-  status: z.enum(["QUERO_LER", "LENDO", "LIDO", "PAUSADO", "ABANDONADO"]),
-  isbn: z.string().optional().nullable(),
-  notes: z.string().optional().nullable(),
-  currentPage: z.coerce.number().optional().nullable(),
-})
+export default function AddBookForm({ genres }: { genres: { id: number; name: string }[] }) {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
 
-export async function createBookAction(prevState: any, formData: FormData) {
-  const values = Object.fromEntries(formData.entries())
+    const formData = new FormData(e.currentTarget);
 
-  const processedValues = {
-    ...values,
-    pages: values.pages || null,
-    rating: values.rating || null,
-    synopsis: values.synopsis || null,
-    cover: values.cover || null,
+    const result = await createBookAction(formData);
+
+    setLoading(false);
+
+    if (result?.error) {
+      setError(result.error);
+      return;
+    }
+
+    // Ação redireciona automaticamente para /library
   }
 
-  const validatedFields = formSchema.safeParse(processedValues)
+  return (
+    <form
+      onSubmit={handleSubmit}
+      className="bg-white shadow-lg rounded-xl p-6 max-w-lg mx-auto flex flex-col gap-4"
+    >
+      <h2 className="text-xl font-semibold mb-2">Adicionar Novo Livro</h2>
 
-  if (!validatedFields.success) {
-    console.error(validatedFields.error.flatten().fieldErrors)
-    return { error: "Dados inválidos. Verifique os campos e tente novamente." }
-  }
+      {error && (
+        <p className="text-red-500 text-sm bg-red-100 p-2 rounded">{error}</p>
+      )}
 
-  const { genreId, ...bookData } = validatedFields.data;
+      <input
+        name="title"
+        placeholder="Título"
+        required
+        className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+      />
+      <input
+        name="author"
+        placeholder="Autor"
+        required
+        className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+      />
 
-  try {
-    await createBook({
-      ...bookData,
-      genre: {
-        connect: { id: Number(genreId) },
-      },
-    });
-  } catch (error) {
-    console.error(error)
-    return { error: "Ocorreu um erro ao salvar o livro no banco de dados." }
-  }
+      <div className="flex gap-2">
+        <input
+          name="year"
+          type="number"
+          placeholder="Ano"
+          className="flex-1 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+        <input
+          name="pages"
+          type="number"
+          placeholder="Páginas"
+          className="flex-1 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+      </div>
 
-  revalidatePath("/library")
-  redirect("/library")
+      <input
+        name="rating"
+        type="number"
+        placeholder="Nota (0-5)"
+        min={0}
+        max={5}
+        className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+      />
+
+      <select
+        name="status"
+        defaultValue="QUERO_LER"
+        className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+      >
+        <option value="QUERO_LER">Quero Ler</option>
+        <option value="LENDO">Lendo</option>
+        <option value="LIDO">Lido</option>
+        <option value="PAUSADO">Pausado</option>
+        <option value="ABANDONADO">Abandonado</option>
+      </select>
+
+      <select
+        name="genreId"
+        required
+        className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+      >
+        <option value="">Selecione um gênero</option>
+        {genres.map((g) => (
+          <option key={g.id} value={g.id}>{g.name}</option>
+        ))}
+      </select>
+
+      <input
+        name="cover"
+        placeholder="URL da capa"
+        className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+      />
+
+      <textarea
+        name="synopsis"
+        placeholder="Sinopse"
+        rows={4}
+        className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none"
+      />
+
+      <button
+        type="submit"
+        disabled={loading}
+        className="mt-2 bg-blue-500 text-white font-semibold py-2 rounded-md hover:bg-blue-600 disabled:bg-gray-300"
+      >
+        {loading ? "Salvando..." : "Salvar Livro"}
+      </button>
+    </form>
+  );
 }
-
-

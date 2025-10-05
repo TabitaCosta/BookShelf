@@ -1,206 +1,37 @@
-"use client"
-import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
-import { Book, books } from "data/books"
+import { prisma } from '../../src/lib/prisma';
+import AddBookForm from '../../src/components/AddBookForm';
+import QuickNav from '../../src/components/Dashboard/QuickNav'; // Importa o QuickNav
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 
-const genres = Array.from(new Set(books.map((b) => b.genreId)))
-
-const statuses: Book["status"][] = [
-  "QUERO_LER",
-  "LENDO",
-  "LIDO",
-  "PAUSADO",
-  "ABANDONADO",
-]
-
-export default function AddBookPage() {
-  const router = useRouter()
-
-  const [form, setForm] = useState<Partial<Book>>({
-    title: "",
-    author: "",
-    genreId: "",
-    year: new Date().getFullYear(),
-    pages: undefined,
-    rating: 0,
-    synopsis: "",
-    cover: "",
-    status: "QUERO_LER",
-  })
-
-  const [booksList, setBooksList] = useState<Book[]>([])
-
-  useEffect(() => {
-    const stored = localStorage.getItem("books")
-    if (stored) {
-      setBooksList(JSON.parse(stored))
-    } else {
-      localStorage.setItem("books", JSON.stringify(books))
-      setBooksList(books)
-    }
-  }, [])
-
-  const handleChange = (field: keyof Book, value: any) => {
-    setForm((prev) => ({ ...prev, [field]: value }))
-  }
-
-  const isValid =
-    form.title &&
-    form.author &&
-    form.genreId &&
-    form.year &&
-    form.rating &&
-    form.status
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!isValid) return
-
-    const newBook: Book = {
-      id: crypto.randomUUID(),
-      title: form.title!,
-      author: form.author!,
-      genreId: form.genreId!,
-      year: Number(form.year),
-      pages: form.pages,
-      rating: form.rating!,
-      synopsis: form.synopsis,
-      cover: form.cover,
-      status: form.status!,
-    }
-
-    const updatedBooks = [...booksList, newBook]
-
-    localStorage.setItem("books", JSON.stringify(updatedBooks))
-
-    setBooksList(updatedBooks)
-
-    console.log("Livro salvo:", newBook)
-
-    router.push("/library")
-  }
+export default async function AddBookPage() {
+  // Busca os géneros do banco de dados para passar ao formulário
+  const genres = await prisma.genre.findMany({
+    orderBy: { name: "asc" },
+  });
 
   return (
-    <div className="max-w-2xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-6">Adicionar Livro</h1>
+    // Usamos um container para centrar e limitar a largura, como no Dashboard
+    <div className="container mx-auto p-4 md:p-8 max-w-2xl">
+      {/* Adiciona o componente de navegação rápida com espaçamento abaixo */}
+      <div className="mb-8">
+        <QuickNav />
+      </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          type="text"
-          placeholder="Título"
-          value={form.title}
-          onChange={(e) => handleChange("title", e.target.value)}
-          className="w-full border p-2 rounded"
-          required
-        />
-
-        <input
-          type="text"
-          placeholder="Autor"
-          value={form.author}
-          onChange={(e) => handleChange("author", e.target.value)}
-          className="w-full border p-2 rounded"
-          required
-        />
-
-        <select
-          value={form.genreId}
-          onChange={(e) => handleChange("genreId", e.target.value)}
-          className="w-full border p-2 rounded"
-          required
-        >
-          <option value="">Selecione um gênero</option>
-          {genres.map((g) => (
-            <option key={g} value={g}>
-              {g}
-            </option>
-          ))}
-        </select>
-
-        <input
-          type="number"
-          placeholder="Ano de publicação"
-          value={form.year}
-          onChange={(e) => handleChange("year", Number(e.target.value))}
-          className="w-full border p-2 rounded"
-          required
-        />
-
-        <input
-          type="number"
-          placeholder="Número de páginas"
-          value={form.pages || ""}
-          onChange={(e) => handleChange("pages", Number(e.target.value))}
-          className="w-full border p-2 rounded"
-        />
-
-        <div className="flex items-center space-x-2">
-          {[1, 2, 3, 4, 5].map((star) => (
-            <span
-              key={star}
-              onClick={() => handleChange("rating", star)}
-              className={`cursor-pointer text-2xl ${
-                star <= (form.rating || 0) ? "text-yellow-400" : "text-gray-300"
-              }`}
-            >
-              ★
-            </span>
-          ))}
-        </div>
-
-        <select
-          value={form.status}
-          onChange={(e) =>
-            handleChange("status", e.target.value as Book["status"])
-          }
-          className="w-full border p-2 rounded"
-          required
-        >
-          {statuses.map((s) => (
-            <option key={s} value={s}>
-              {s}
-            </option>
-          ))}
-        </select>
-
-        <div>
-          <input
-            type="url"
-            placeholder="URL da capa"
-            value={form.cover || ""}
-            onChange={(e) => handleChange("cover", e.target.value)}
-            className="w-full border p-2 rounded"
-          />
-          {form.cover && (
-            <img
-              src={form.cover}
-              alt="Preview da capa"
-              className="mt-2 w-32 h-48 object-cover rounded border"
-            />
-          )}
-        </div>
-
-        <textarea
-          placeholder="Sinopse"
-          value={form.synopsis || ""}
-          onChange={(e) => handleChange("synopsis", e.target.value)}
-          className="w-full border p-2 rounded"
-          rows={4}
-        />
-
-        <button
-          type="submit"
-          disabled={!isValid}
-          className={`px-4 py-2 rounded text-white ${
-            isValid
-              ? "bg-blue-600 hover:bg-blue-700"
-              : "bg-gray-400 cursor-not-allowed"
-          }`}
-        >
-          Salvar
-        </button>
-      </form>
+      {/* Envolvemos o formulário num Card para uma aparência mais limpa e moderna */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-2xl font-bold">Adicionar Novo Livro</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <AddBookForm genres={genres} />
+        </CardContent>
+      </Card>
     </div>
-  )
+  );
 }
 

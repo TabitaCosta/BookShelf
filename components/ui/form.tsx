@@ -1,167 +1,163 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import * as LabelPrimitive from "@radix-ui/react-label"
-import { Slot } from "@radix-ui/react-slot"
-import {
-  Controller,
-  FormProvider,
-  useFormContext,
-  useFormState,
-  type ControllerProps,
-  type FieldPath,
-  type FieldValues,
-} from "react-hook-form"
+import { useState } from "react";
+import QuickNav from "../Dashboard/QuickNav";
 
-import { cn } from "@/lib/utils"
-import { Label } from "@/components/ui/label"
+export default function EditBookForm({ book, genres }) {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [formData, setFormData] = useState({
+    title: book.title || "",
+    author: book.author || "",
+    year: book.year || "",
+    pages: book.pages || "",
+    rating: book.rating || "",
+    status: book.status || "QUERO_LER",
+    genreId: book.genreId || "",
+    cover: book.cover || "",
+    synopsis: book.synopsis || "",
+  });
 
-const Form = FormProvider
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
 
-type FormFieldContextValue<
-  TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
-> = {
-  name: TName
-}
+    const res = await fetch(`/api/books/${book.id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    });
 
-const FormFieldContext = React.createContext<FormFieldContextValue>(
-  {} as FormFieldContextValue
-)
+    setLoading(false);
 
-const FormField = <
-  TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
->({
-  ...props
-}: ControllerProps<TFieldValues, TName>) => {
-  return (
-    <FormFieldContext.Provider value={{ name: props.name }}>
-      <Controller {...props} />
-    </FormFieldContext.Provider>
-  )
-}
+    if (!res.ok) {
+      setError("Erro ao atualizar o livro.");
+      return;
+    }
 
-const useFormField = () => {
-  const fieldContext = React.useContext(FormFieldContext)
-  const itemContext = React.useContext(FormItemContext)
-  const { getFieldState } = useFormContext()
-  const formState = useFormState({ name: fieldContext.name })
-  const fieldState = getFieldState(fieldContext.name, formState)
-
-  if (!fieldContext) {
-    throw new Error("useFormField should be used within <FormField>")
+    alert("📘 Livro atualizado com sucesso!");
   }
 
-  const { id } = itemContext
-
-  return {
-    id,
-    name: fieldContext.name,
-    formItemId: `${id}-form-item`,
-    formDescriptionId: `${id}-form-item-description`,
-    formMessageId: `${id}-form-item-message`,
-    ...fieldState,
-  }
-}
-
-type FormItemContextValue = {
-  id: string
-}
-
-const FormItemContext = React.createContext<FormItemContextValue>(
-  {} as FormItemContextValue
-)
-
-function FormItem({ className, ...props }: React.ComponentProps<"div">) {
-  const id = React.useId()
-
-  return (
-    <FormItemContext.Provider value={{ id }}>
-      <div
-        data-slot="form-item"
-        className={cn("grid gap-2", className)}
-        {...props}
-      />
-    </FormItemContext.Provider>
-  )
-}
-
-function FormLabel({
-  className,
-  ...props
-}: React.ComponentProps<typeof LabelPrimitive.Root>) {
-  const { error, formItemId } = useFormField()
-
-  return (
-    <Label
-      data-slot="form-label"
-      data-error={!!error}
-      className={cn("data-[error=true]:text-destructive", className)}
-      htmlFor={formItemId}
-      {...props}
-    />
-  )
-}
-
-function FormControl({ ...props }: React.ComponentProps<typeof Slot>) {
-  const { error, formItemId, formDescriptionId, formMessageId } = useFormField()
-
-  return (
-    <Slot
-      data-slot="form-control"
-      id={formItemId}
-      aria-describedby={
-        !error
-          ? `${formDescriptionId}`
-          : `${formDescriptionId} ${formMessageId}`
-      }
-      aria-invalid={!!error}
-      {...props}
-    />
-  )
-}
-
-function FormDescription({ className, ...props }: React.ComponentProps<"p">) {
-  const { formDescriptionId } = useFormField()
-
-  return (
-    <p
-      data-slot="form-description"
-      id={formDescriptionId}
-      className={cn("text-muted-foreground text-sm", className)}
-      {...props}
-    />
-  )
-}
-
-function FormMessage({ className, ...props }: React.ComponentProps<"p">) {
-  const { error, formMessageId } = useFormField()
-  const body = error ? String(error?.message ?? "") : props.children
-
-  if (!body) {
-    return null
+  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   }
 
   return (
-    <p
-      data-slot="form-message"
-      id={formMessageId}
-      className={cn("text-destructive text-sm", className)}
-      {...props}
-    >
-      {body}
-    </p>
-  )
-}
+    <div className="p-8 max-w-3xl mx-auto">
+      <QuickNav />
 
-export {
-  useFormField,
-  Form,
-  FormItem,
-  FormLabel,
-  FormControl,
-  FormDescription,
-  FormMessage,
-  FormField,
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white shadow-lg rounded-xl p-6 flex flex-col gap-4"
+      >
+        <h2 className="text-xl font-semibold mb-2">Editar Livro</h2>
+
+        {error && (
+          <p className="text-red-500 text-sm bg-red-100 p-2 rounded">{error}</p>
+        )}
+
+        <input
+          name="title"
+          value={formData.title}
+          onChange={handleChange}
+          placeholder="Título"
+          required
+          className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+
+        <input
+          name="author"
+          value={formData.author}
+          onChange={handleChange}
+          placeholder="Autor"
+          required
+          className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+
+        <div className="flex gap-2">
+          <input
+            name="year"
+            type="number"
+            value={formData.year}
+            onChange={handleChange}
+            placeholder="Ano"
+            className="flex-1 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
+          <input
+            name="pages"
+            type="number"
+            value={formData.pages}
+            onChange={handleChange}
+            placeholder="Páginas"
+            className="flex-1 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
+        </div>
+
+        <input
+          name="rating"
+          type="number"
+          min={0}
+          max={5}
+          value={formData.rating}
+          onChange={handleChange}
+          placeholder="Nota (0-5)"
+          className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+
+        <select
+          name="status"
+          value={formData.status}
+          onChange={handleChange}
+          className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+        >
+          <option value="QUERO_LER">Quero Ler</option>
+          <option value="LENDO">Lendo</option>
+          <option value="LIDO">Lido</option>
+          <option value="PAUSADO">Pausado</option>
+          <option value="ABANDONADO">Abandonado</option>
+        </select>
+
+        <select
+          name="genreId"
+          value={formData.genreId}
+          onChange={handleChange}
+          required
+          className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+        >
+          <option value="">Selecione um gênero</option>
+          {genres.map((g) => (
+            <option key={g.id} value={g.id}>
+              {g.name}
+            </option>
+          ))}
+        </select>
+
+        <input
+          name="cover"
+          value={formData.cover}
+          onChange={handleChange}
+          placeholder="URL da capa"
+          className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+
+        <textarea
+          name="synopsis"
+          value={formData.synopsis}
+          onChange={handleChange}
+          placeholder="Sinopse"
+          rows={4}
+          className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none"
+        />
+
+        <button
+          type="submit"
+          disabled={loading}
+          className="mt-2 bg-blue-500 text-white font-semibold py-2 rounded-md hover:bg-blue-600 disabled:bg-gray-300"
+        >
+          {loading ? "Salvando..." : "Salvar Alterações"}
+        </button>
+      </form>
+    </div>
+  );
 }

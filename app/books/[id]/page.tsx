@@ -1,77 +1,83 @@
-"use client";
+import { prisma } from '../../../src/lib/prisma';
+import { notFound } from 'next/navigation';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft, Pencil } from 'lucide-react';
 
-import { use } from "react";
-import { useEffect, useState } from "react";
-import { ArrowLeftIcon } from "@radix-ui/react-icons";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
+// As props da página incluem os "params" da URL, que contêm o ID do livro
+interface BookDetailsPageProps {
+  params: {
+    id: string;
+  };
+}
 
-import { books, Book } from "@/data/books";
-import { genres } from "@/data/genres"; // importando os gêneros
+// Esta página é um Server Component "async", que pode buscar dados diretamente
+export default async function BookDetailsPage({ params }: BookDetailsPageProps) {
+  // 1. Busca um único livro na base de dados usando o ID da URL
+  const book = await prisma.book.findUnique({
+    where: {
+      id: params.id,
+    },
+    include: {
+      genre: true, // Também busca os dados do género relacionado
+    },
+  });
 
-export default function BookDetailsPage({ params }: { params: Promise<{ id: string }> }) {
-  const router = useRouter();
-  const { id: bookId } = use(params); // "desembrulha" a Promise
-
-  const [book, setBook] = useState<Book | null>(null);
-
-  useEffect(() => {
-    const found = books.find(b => b.id === bookId) || null;
-    setBook(found);
-  }, [bookId]);
-
+  // 2. Se o livro não for encontrado, exibe uma página 404
   if (!book) {
-    return <p className="p-6 text-center">Livro não encontrado.</p>;
+    notFound();
   }
 
-  const handleDelete = () => {
-    toast.success("Livro excluído!", {
-      description: `O livro "${book.title}" foi removido da sua biblioteca.`,
-    });
-    setTimeout(() => router.push("/books"), 1000);
-  };
+  const rating = book.rating ?? 0;
 
-  // Aqui buscamos o nome do gênero baseado no genreId
-  const genreName = genres.find(g => g.id === book.genreId)?.name || "N/A";
-
+  // 3. Renderiza os detalhes do livro encontrado
   return (
-    <div className="p-6 max-w-4xl mx-auto">
-      <Link href="/books" className="flex items-center text-gray-600 hover:text-gray-800 mb-4">
-        <ArrowLeftIcon className="mr-2 h-4 w-4" />
-        Voltar para a Biblioteca
-      </Link>
-
-      <div className="flex gap-6">
-        <img
-          src={book.cover || "/fallback-cover.png"}
-          alt={book.title}
-          className="w-48 h-72 object-cover rounded-md shadow-md"
-          loading="lazy"
-        />
-
-        <div className="flex-1">
-          <h1 className="text-2xl font-bold">{book.title}</h1>
-          <p className="text-gray-600">por {book.author}</p>
-          <p className="mt-2"><span className="font-semibold">Gênero:</span> {genreName}</p>
-          <p><span className="font-semibold">Ano:</span> {book.year}</p>
-          <p><span className="font-semibold">Páginas:</span> {book.pages || "N/A"}</p>
-          {book.rating && (
-            <p className="mt-2">
-              <span className="font-semibold">Avaliação:</span>{" "}
-              {"★".repeat(book.rating)}{"☆".repeat(5 - book.rating)}
-            </p>
-          )}
-          <p className="mt-2"><span className="font-semibold">Status:</span> {book.status}</p>
-        </div>
+    <div className="container mx-auto p-4 md:p-8 max-w-4xl">
+      <div className="mb-6">
+        <Link href="/library" passHref>
+          <Button variant="ghost">
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Voltar para a Biblioteca
+          </Button>
+        </Link>
       </div>
 
-      {book.synopsis && (
-        <div className="mt-6">
-          <h2 className="text-xl font-semibold mb-2">Sinopse</h2>
-          <p className="text-gray-700">{book.synopsis}</p>
+      <div className="grid md:grid-cols-3 gap-8 items-start">
+        <div className="md:col-span-1">
+          <img
+            src={book.cover || `https://placehold.co/400x600/eee/31343C?text=${encodeURIComponent(book.title)}`}
+            alt={`Capa do livro ${book.title}`}
+            className="w-full h-auto object-cover rounded-lg shadow-lg"
+          />
         </div>
-      )}
+        <div className="md:col-span-2">
+          <div className="flex justify-between items-start">
+            <div>
+              <h1 className="text-4xl font-bold mb-2">{book.title}</h1>
+              <p className="text-xl text-gray-600 mb-4">{book.author}</p>
+            </div>
+          </div>
+          
+          <div className="flex flex-wrap items-center gap-4 mb-6 text-sm">
+            <span className="bg-gray-200 px-3 py-1 rounded-full">{book.genre?.name || 'Sem Género'}</span>
+            <span>{book.year}</span>
+            <span>{book.pages} páginas</span>
+            <div className="flex items-center gap-1 text-yellow-500">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <span key={i}>
+                  {i < rating ? "★" : "☆"}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <div className="prose max-w-none text-gray-700">
+            <h2 className="font-semibold text-lg">Sinopse</h2>
+            <p>{book.synopsis || 'Sinopse não disponível.'}</p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
+
