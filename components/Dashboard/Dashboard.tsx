@@ -1,5 +1,6 @@
 import StatsCard from './StatsCard';
 import QuickNav from './QuickNav';
+import ThemeToggle from '@/src/components/ThemeToggle';
 
 interface Livro {
   id: number;
@@ -23,16 +24,22 @@ export default function Dashboard() {
 
   return (
     <div className="p-8">
-      <h1 className="text-3xl font-bold mb-6">Bookshelf</h1>
+      {/* Cabeçalho com título e ThemeToggle */}
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold">Bookshelf</h1>
+        <ThemeToggle />
+      </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+      {/* Navegação rápida */}
+      <QuickNav />
+
+      {/* Estatísticas */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mt-6">
         <StatsCard title="Total de livros" value={totalLivros} />
         <StatsCard title="Em leitura" value={emLeitura} />
         <StatsCard title="Finalizados" value={finalizados} />
         <StatsCard title="Páginas lidas" value={paginasLidas} />
       </div>
-
-      <QuickNav />
     </div>
   );
 }
