@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { createBookAction } from "@/src/actions/bookActions";
+import { Genre } from "@prisma/client";
 
-export default function AddBookForm({ genres }: { genres: { id: number; name: string }[] }) {
+export default function AddBookForm({ genres }: { genres: Genre[] }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [coverPreviewUrl, setCoverPreviewUrl] = useState("");

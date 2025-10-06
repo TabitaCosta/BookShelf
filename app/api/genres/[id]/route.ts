@@ -1,14 +1,17 @@
 import { NextResponse } from "next/server";
-import { genres } from "data/genres";
-import { books } from "data/books";
+import { prisma } from "../../../../src/lib/prisma";
 
-// GET - Buscar gênero por ID
+// 🔹 GET - Buscar gênero por ID
 export async function GET(
   request: Request,
-  { params }: { params: Promise<{ id: string }> } // 👈 Promise
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id } = await params; // 👈 await
-  const genre = genres.find((g) => g.id === id);
+  const { id } = await params;
+  
+  const genre = await prisma.genre.findUnique({
+    where: { id: Number(id) },
+    include: { books: true },
+  });
 
   if (!genre) {
     return NextResponse.json(
@@ -20,21 +23,12 @@ export async function GET(
   return NextResponse.json(genre);
 }
 
-// PUT - Atualizar gênero por ID
+// 🔹 PUT - Atualizar gênero por ID
 export async function PUT(
   request: Request,
-  { params }: { params: Promise<{ id: string }> } // 👈 Promise
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id } = await params; // 👈 await
-  const index = genres.findIndex((g) => g.id === id);
-
-  if (index === -1) {
-    return NextResponse.json(
-      { error: "Gênero não encontrado" },
-      { status: 404 }
-    );
-  }
-
+  const { id } = await params;
   const body = await request.json();
 
   if (!body.name || body.name.trim() === "") {
@@ -44,30 +38,37 @@ export async function PUT(
     );
   }
 
-  genres[index] = { ...genres[index], name: body.name };
+  try {
+    const updatedGenre = await prisma.genre.update({
+      where: { id: Number(id) },
+      data: { name: body.name },
+    });
 
-  return NextResponse.json({
-    message: "Gênero atualizado com sucesso",
-    updated: genres[index],
-  });
-}
-
-// DELETE - Remover gênero por ID
-export async function DELETE(
-  request: Request,
-  { params }: { params: Promise<{ id: string }> } // 👈 Promise
-) {
-  const { id } = await params; // 👈 await
-  const index = genres.findIndex((g) => g.id === id);
-
-  if (index === -1) {
+    return NextResponse.json({
+      message: "Gênero atualizado com sucesso",
+      updated: updatedGenre,
+    });
+  } catch {
     return NextResponse.json(
       { error: "Gênero não encontrado" },
       { status: 404 }
     );
   }
+}
 
-  const hasBooks = books.some((b) => b.genreId === id);
+// 🔹 DELETE - Remover gênero por ID
+export async function DELETE(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
+  const genreId = Number(id);
+
+  // Verificar se há livros associados
+  const hasBooks = await prisma.book.findFirst({
+    where: { genreId },
+  });
+
   if (hasBooks) {
     return NextResponse.json(
       {
@@ -78,9 +79,19 @@ export async function DELETE(
     );
   }
 
-  const deletedGenre = genres.splice(index, 1)[0];
-  return NextResponse.json({
-    message: "Gênero deletado com sucesso",
-    deleted: deletedGenre,
-  });
+  try {
+    const deletedGenre = await prisma.genre.delete({
+      where: { id: genreId },
+    });
+
+    return NextResponse.json({
+      message: "Gênero deletado com sucesso",
+      deleted: deletedGenre,
+    });
+  } catch {
+    return NextResponse.json(
+      { error: "Gênero não encontrado" },
+      { status: 404 }
+    );
+  }
 }

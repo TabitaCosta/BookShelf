@@ -1,6 +1,6 @@
-import { getBooks } from "@/data/books"
-import BookCard from "@/components/BookCard"
-import SearchAndFilter from "@/components/SearchAndFilter"
+import { getBooks } from "../../../src/data/books"
+import BookCard from "../../../src/components/BookCard"
+import SearchAndFilter from "../../../src/components/SearchAndFilter"
 
 interface BooksPageProps {
   searchParams: {

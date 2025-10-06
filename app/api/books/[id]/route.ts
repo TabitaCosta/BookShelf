@@ -6,10 +6,14 @@ import { z } from 'zod';
 const updateBookSchema = z.object({
   title: z.string().trim().min(1, 'Título não pode estar vazio').optional(),
   author: z.string().trim().min(1, 'Autor não pode estar vazio').optional(),
+<<<<<<< HEAD
   
   // 🔧 THE FIX IS HERE: Change z.number() to z.string() to match your Prisma schema
   genreId: z.string().trim().min(1, 'ID do gênero não pode estar vazio').optional(),
 
+=======
+  genreId: z.string().uuid({ message: "ID de gênero inválido" }).optional(), // Corrigido para string UUID
+>>>>>>> 987482f9280c92289a6985a72031932b8ad6feda
   status: z.enum(['QUERO_LER', 'LENDO', 'LIDO', 'PAUSADO', 'ABANDONADO']).optional(),
   year: z.number().int().optional().nullable(),
   pages: z.number().int().optional().nullable(),
@@ -23,10 +27,10 @@ const updateBookSchema = z.object({
  */
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } } // This part is now correct!
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = params.id;
+    const { id } = await params;
     const body = await request.json();
 
     const validatedData = updateBookSchema.parse(body);
