@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { books } from "data/books";
+import { books } from "../../../../../src/data/books";
 
 // GET - Retornar todos os livros de um gênero específico
 export async function GET(
