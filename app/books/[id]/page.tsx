@@ -6,17 +6,20 @@ import { ArrowLeft, Pencil } from 'lucide-react';
 
 // As props da página incluem os "params" da URL, que contêm o ID do livro
 interface BookDetailsPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 // Esta página é um Server Component "async", que pode buscar dados diretamente
 export default async function BookDetailsPage({ params }: BookDetailsPageProps) {
+  // Await params antes de usar
+  const { id } = await params;
+
   // 1. Busca um único livro na base de dados usando o ID da URL
   const book = await prisma.book.findUnique({
     where: {
-      id: params.id,
+      id: id,
     },
     include: {
       genre: true, // Também busca os dados do género relacionado
@@ -80,4 +83,3 @@ export default async function BookDetailsPage({ params }: BookDetailsPageProps) 
     </div>
   );
 }
-

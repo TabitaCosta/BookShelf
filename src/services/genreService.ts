@@ -1,5 +1,5 @@
 import { prisma } from "../lib/prisma";
-import { Genre } from "@prisma/client";
+import { Genre } from "../lib/prisma";
 
 export async function getGenres(): Promise<Genre[]> {
   return prisma.genre.findMany({ orderBy: { name: "asc" } });

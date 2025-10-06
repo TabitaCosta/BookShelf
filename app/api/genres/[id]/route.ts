@@ -4,11 +4,13 @@ import { prisma } from "../../../../src/lib/prisma";
 // 🔹 GET - Buscar gênero por ID
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
+  
   const genre = await prisma.genre.findUnique({
-    where: { id: Number(params.id) },
-    include: { books: true }, // se quiser trazer os livros do gênero
+    where: { id: Number(id) },
+    include: { books: true },
   });
 
   if (!genre) {
@@ -24,8 +26,9 @@ export async function GET(
 // 🔹 PUT - Atualizar gênero por ID
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   const body = await request.json();
 
   if (!body.name || body.name.trim() === "") {
@@ -37,7 +40,7 @@ export async function PUT(
 
   try {
     const updatedGenre = await prisma.genre.update({
-      where: { id: Number(params.id) },
+      where: { id: Number(id) },
       data: { name: body.name },
     });
 
@@ -56,9 +59,10 @@ export async function PUT(
 // 🔹 DELETE - Remover gênero por ID
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const genreId = Number(params.id);
+  const { id } = await params;
+  const genreId = Number(id);
 
   // Verificar se há livros associados
   const hasBooks = await prisma.book.findFirst({

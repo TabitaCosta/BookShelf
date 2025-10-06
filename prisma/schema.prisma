@@ -18,13 +18,13 @@ enum ReadingStatus {
 }
 
 model Genre {
-  id    Int    @id @default(autoincrement())
-  name  String @unique
+  id   String @id @default(uuid())
+  name String
   books Book[]
 }
 
 model Book {
-  id        String   @id @default(cuid())
+  id        String        @id @default(cuid())
   title     String
   author    String
   year      Int?
@@ -32,10 +32,9 @@ model Book {
   rating    Int?
   synopsis  String?
   cover     String?
-  genre     Genre    @relation(fields: [genreId], references: [id])
-  genreId   Int
+  genre     Genre         @relation(fields: [genreId], references: [id])
+  genreId   String        // Correct type to match Genre.id
   status    ReadingStatus @default(QUERO_LER)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
 }
-

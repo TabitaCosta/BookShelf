@@ -6,7 +6,7 @@ import { z } from 'zod';
 const updateBookSchema = z.object({
   title: z.string().trim().min(1, 'Título não pode estar vazio').optional(),
   author: z.string().trim().min(1, 'Autor não pode estar vazio').optional(),
-  genreId: z.number().int().positive().optional(),
+  genreId: z.string().uuid({ message: "ID de gênero inválido" }).optional(), // Corrigido para string UUID
   status: z.enum(['QUERO_LER', 'LENDO', 'LIDO', 'PAUSADO', 'ABANDONADO']).optional(),
   year: z.number().int().optional().nullable(),
   pages: z.number().int().optional().nullable(),
@@ -21,10 +21,10 @@ const updateBookSchema = z.object({
  */
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = params.id;
+    const { id } = await params;
     const body = await request.json();
 
     // Valida os dados recebidos com o Zod
