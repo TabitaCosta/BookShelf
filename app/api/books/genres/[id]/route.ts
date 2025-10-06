@@ -1,15 +1,13 @@
 import { NextResponse } from "next/server";
 import { prisma } from "../../../../../src/lib/prisma";
 
-type Params = {
-  params: {
-    id: string;
-  };
-};
+interface RouteContext {
+  params: Promise<{ id: string }>;
+}
 
-// GET - Buscar um livro pelo ID
-export async function GET(_: Request, { params }: Params) {
-  const { id } = params;
+// 🔹 GET - Buscar livro por ID
+export async function GET(req: NextRequest, context: RouteContext) {
+  const { id } = await context.params;
   const book = await prisma.book.findUnique({
     where: { id: Number(id) },
     include: { genre: true },
@@ -17,10 +15,10 @@ export async function GET(_: Request, { params }: Params) {
   return NextResponse.json(book);
 }
 
-// PUT - Atualizar um livro
-export async function PUT(request: Request, { params }: Params) {
-  const { id } = params;
-  const data = await request.json();
+// 🔹 PUT - Atualizar livro
+export async function PUT(req: NextRequest, context: RouteContext) {
+  const { id } = await context.params;
+  const data = await req.json();
 
   const updatedBook = await prisma.book.update({
     where: { id: Number(id) },
@@ -30,11 +28,13 @@ export async function PUT(request: Request, { params }: Params) {
   return NextResponse.json(updatedBook);
 }
 
-// DELETE - Deletar um livro
-export async function DELETE(_: Request, { params }: Params) {
-  const { id } = params;
+// 🔹 DELETE - Excluir livro
+export async function DELETE(req: NextRequest, context: RouteContext) {
+  const { id } = await context.params;
+
   await prisma.book.delete({
     where: { id: Number(id) },
   });
+
   return NextResponse.json({ message: "Livro deletado com sucesso" });
 }
