@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { randomUUID } from "crypto";
-import { genres, Genre } from "data/genres";
+import { Genre } from "@prisma/client";
+import genres from "../../../components/library/LibraryClient";
 
 // GET - Retorna todos os gêneros
 export async function GET() {
