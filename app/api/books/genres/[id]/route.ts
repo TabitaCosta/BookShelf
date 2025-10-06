@@ -1,22 +1,40 @@
 import { NextResponse } from "next/server";
-import { getBooks } from "../../../../../src/data/books";
+import { prisma } from "../../../../../src/lib/prisma";
 
-// GET - Retornar todos os livros de um gênero específico
-export async function GET(
-  request: Request,
-  { params }: { params: Promise<{ id: string }> } // 👈 Promise
-) {
-  const { id } = await params; // 👈 await
+type Params = {
+  params: {
+    id: string;
+  };
+};
 
-  const books = await getBooks();
-  const filteredBooks = books.filter((book) => book.genreId === Number(id));
+// GET - Buscar um livro pelo ID
+export async function GET(_: Request, { params }: Params) {
+  const { id } = params;
+  const book = await prisma.book.findUnique({
+    where: { id: Number(id) },
+    include: { genre: true },
+  });
+  return NextResponse.json(book);
+}
 
-  if (filteredBooks.length === 0) {
-    return NextResponse.json(
-      { error: "Nenhum livro encontrado para este gênero" },
-      { status: 404 }
-    );
-  }
+// PUT - Atualizar um livro
+export async function PUT(request: Request, { params }: Params) {
+  const { id } = params;
+  const data = await request.json();
 
-  return NextResponse.json(filteredBooks);
+  const updatedBook = await prisma.book.update({
+    where: { id: Number(id) },
+    data,
+  });
+
+  return NextResponse.json(updatedBook);
+}
+
+// DELETE - Deletar um livro
+export async function DELETE(_: Request, { params }: Params) {
+  const { id } = params;
+  await prisma.book.delete({
+    where: { id: Number(id) },
+  });
+  return NextResponse.json({ message: "Livro deletado com sucesso" });
 }
