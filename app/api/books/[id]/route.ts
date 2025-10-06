@@ -6,7 +6,10 @@ import { z } from 'zod';
 const updateBookSchema = z.object({
   title: z.string().trim().min(1, 'Título não pode estar vazio').optional(),
   author: z.string().trim().min(1, 'Autor não pode estar vazio').optional(),
-  genreId: z.number().int().positive().optional(),
+  
+  // 🔧 THE FIX IS HERE: Change z.number() to z.string() to match your Prisma schema
+  genreId: z.string().trim().min(1, 'ID do gênero não pode estar vazio').optional(),
+
   status: z.enum(['QUERO_LER', 'LENDO', 'LIDO', 'PAUSADO', 'ABANDONADO']).optional(),
   year: z.number().int().optional().nullable(),
   pages: z.number().int().optional().nullable(),
@@ -17,17 +20,15 @@ const updateBookSchema = z.object({
 
 /**
  * Lida com pedidos PUT para atualizar um livro existente.
- * No App Router, usamos funções exportadas como PUT, GET, POST, etc.
  */
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: { id: string } } // This part is now correct!
 ) {
   try {
     const id = params.id;
     const body = await request.json();
 
-    // Valida os dados recebidos com o Zod
     const validatedData = updateBookSchema.parse(body);
 
     const updatedBook = await prisma.book.update({
@@ -39,7 +40,6 @@ export async function PUT(
   } catch (error) {
     console.error("Erro ao atualizar o livro:", error);
 
-    // Se a validação do Zod falhar, retorna um erro 400
     if (error instanceof z.ZodError) {
       return NextResponse.json({ error: 'Dados de entrada inválidos', details: error.flatten() }, { status: 400 });
     }

@@ -6,6 +6,7 @@ import { createBookAction } from "@/src/actions/bookActions";
 export default function AddBookForm({ genres }: { genres: { id: number; name: string }[] }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [coverPreviewUrl, setCoverPreviewUrl] = useState("");
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -23,7 +24,11 @@ export default function AddBookForm({ genres }: { genres: { id: number; name: st
       return;
     }
 
-    // Ação redireciona automaticamente para /library
+    // A ação redireciona automaticamente para /library
+  }
+
+  function handleCoverChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setCoverPreviewUrl(e.target.value);
   }
 
   return (
@@ -100,8 +105,27 @@ export default function AddBookForm({ genres }: { genres: { id: number; name: st
       <input
         name="cover"
         placeholder="URL da capa"
+        value={coverPreviewUrl}
+        onChange={handleCoverChange}
         className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
       />
+
+      {/* Preview da imagem da capa */}
+      {coverPreviewUrl && (
+        <div className="my-4 flex justify-center">
+          <img
+            src={coverPreviewUrl}
+            alt="Pré-visualização da capa"
+            className="rounded-md object-contain h-48 border shadow-sm"
+            onError={(e) => {
+              e.currentTarget.style.display = 'none';
+            }}
+            onLoad={(e) => {
+              e.currentTarget.style.display = 'block';
+            }}
+          />
+        </div>
+      )}
 
       <textarea
         name="synopsis"

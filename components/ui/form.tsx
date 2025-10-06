@@ -19,25 +19,49 @@ export default function EditBookForm({ book, genres }) {
   });
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
+  e.preventDefault();
+  setError("");
+  setLoading(true);
 
+  try {
     const res = await fetch(`/api/books/${book.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
+      body: JSON.stringify({
+        ...formData,
+        // 🔧 A CORREÇÃO ESTÁ AQUI:
+        // Remova a conversão para Number. O valor do select já é uma string,
+        // que é o que a sua API com Zod espera.
+        genreId: formData.genreId,
+        
+        // Estas outras conversões estão corretas, mantenha-as!
+        year: formData.year ? Number(formData.year) : undefined,
+        pages: formData.pages ? Number(formData.pages) : undefined,
+        rating: formData.rating ? Number(formData.rating) : undefined,
+      }),
     });
 
-    setLoading(false);
-
     if (!res.ok) {
-      setError("Erro ao atualizar o livro.");
+      const errorData = await res.json();
+      // Mostra um erro mais detalhado vindo da API, se houver
+      setError(errorData.error || "Erro ao atualizar o livro.");
+      setLoading(false);
       return;
     }
 
+    // Sugestão: usar um toast/notificação em vez de alert para melhor UX
     alert("📘 Livro atualizado com sucesso!");
+    // Opcional: redirecionar o usuário após o sucesso
+    // window.location.href = '/library';
+
+  } catch (err) {
+    console.error(err);
+    setError("Ocorreu um erro inesperado. Tente novamente.");
+  } finally {
+    setLoading(false);
   }
+}
+
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) {
     setFormData({ ...formData, [e.target.name]: e.target.value });
