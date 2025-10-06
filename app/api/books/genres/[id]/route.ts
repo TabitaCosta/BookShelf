@@ -2,9 +2,6 @@ import { NextResponse } from "next/server";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { prisma } from "../../../../../src/lib/prisma";
 
-// O "type RouteContext" foi removido.
-
-// O tipo agora é definido diretamente (inline) na assinatura da função.
 export async function GET(request: Request, context: { params: { id: string } }) {
   try {
     const { id } = context.params;
@@ -25,7 +22,6 @@ export async function GET(request: Request, context: { params: { id: string } })
   }
 }
 
-// Tipo inline aplicado aqui também.
 export async function PUT(request: Request, context: { params: { id: string } }) {
   try {
     const { id } = context.params;
@@ -49,8 +45,7 @@ export async function PUT(request: Request, context: { params: { id: string } })
     return NextResponse.json({ error: "Erro interno no servidor" }, { status: 500 });
   }
 }
-
-// E aqui também.
+.
 export async function DELETE(request: Request, context: { params: { id: string } }) {
   try {
      const { id } = context.params;

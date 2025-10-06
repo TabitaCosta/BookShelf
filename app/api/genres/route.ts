@@ -3,12 +3,10 @@ import { randomUUID } from "crypto";
 import { Genre } from "@prisma/client";
 import genres from "../../../components/library/LibraryClient";
 
-// GET - Retorna todos os gêneros
 export async function GET() {
   return NextResponse.json(genres);
 }
 
-// POST - Adiciona um novo gênero
 export async function POST(request: Request) {
   const body = await request.json();
 

@@ -60,10 +60,7 @@ export default function LibraryClient({ initialBooks }: LibraryClientProps) {
 
   return (
     <section className="p-8 max-w-7xl mx-auto">
-      {/* 🔹 Barra de navegação superior */}
       <QuickNav />
-
-      {/* 🔹 Filtros de busca */}
       <div className="mt-6 mb-8 flex flex-col sm:flex-row items-center gap-3">
         <input
           aria-label="Buscar por título ou autor"
@@ -96,7 +93,6 @@ export default function LibraryClient({ initialBooks }: LibraryClientProps) {
         </button>
       </div>
 
-      {/* 🔹 Lista de livros */}
       {filtered.length === 0 ? (
         <p className="text-center text-gray-600 mt-10">
           Nenhum livro encontrado.

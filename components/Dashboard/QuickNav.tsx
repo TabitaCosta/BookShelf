@@ -16,7 +16,7 @@ export default function QuickNav() {
   return (
     <nav className="flex justify-center sm:justify-start gap-3 mb-6 flex-wrap">
       {links.map(({ href, label, icon: Icon, color, border }) => {
-        if (pathname === href) return null; // Oculta o botão da página atual
+        if (pathname === href) return null; 
 
         const isBlue = color === "blue";
         const baseClasses =

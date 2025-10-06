@@ -7,10 +7,8 @@ export default async function EditBookPage({
 }: { 
   params: Promise<{ id: string }> 
 }) {
-  // Await params antes de usar
   const { id } = await params;
 
-  // Busca o livro e os gêneros
   const [book, genres] = await Promise.all([
     prisma.book.findUnique({ where: { id: id } }),
     prisma.genre.findMany({ orderBy: { name: "asc" } }),

@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from "next/server" // Use NextRequest for easier URL parsing
-import { getBooks } from "../../../src/data/books"; // <-- Add this line
+import { NextRequest, NextResponse } from "next/server" 
+import { getBooks } from "../../../src/data/books"; 
 import { createBook } from "../../../src/services/bookService";
 import { z } from "zod";
-// ... (your zod schema and other imports)
+
 
 // GET - Retornar todos os livros ou livros filtrados do banco de dados
 export async function GET(request: NextRequest) { // Use NextRequest

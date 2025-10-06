@@ -24,7 +24,6 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        // Usamos as propriedades .variable diretamente dos objetos importados.
         className={`${GeistSansFont.variable} ${GeistMonoFont.variable} antialiased`}
       >
         <Toaster position="top-right" />

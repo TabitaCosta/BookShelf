@@ -20,7 +20,6 @@ export default function BookCard({ book, onDelete }: BookCardProps) {
 
   const genreName = book.genre?.name || "N/A";
 
-  // Garante que a avaliação é um número antes de a usar
   const rating = book.rating ?? 0;
 
   return (
