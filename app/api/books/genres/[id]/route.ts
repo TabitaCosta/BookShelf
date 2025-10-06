@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { books } from "../../../../../src/data/books";
+import { getBooks } from "../../../../../src/data/books";
 
 // GET - Retornar todos os livros de um gênero específico
 export async function GET(
@@ -8,7 +8,8 @@ export async function GET(
 ) {
   const { id } = await params; // 👈 await
 
-  const filteredBooks = books.filter((book) => book.genreId === id);
+  const books = await getBooks();
+  const filteredBooks = books.filter((book) => book.genreId === Number(id));
 
   if (filteredBooks.length === 0) {
     return NextResponse.json(
