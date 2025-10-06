@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
-import { createBook, getBooks } from "@/data/books" // 1. Importando as funções do banco de dados
+import { getBooks } from "../../../src/data/books" // 1. Importando as funções do banco de dados
+import { createBook } from "../../../src/services/bookService" // 1. Importando as funções do banco de dados
 import { z } from "zod"
 
 // Schema de validação para a criação de um livro via API
