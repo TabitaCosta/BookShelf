@@ -23,10 +23,14 @@ export async function PUT(
       where: { id },
       data: {
         title: body.title.trim(),
-        author: body.author?.trim(),
+        author: body.author?.trim() || null,
         year: body.year ? Number(body.year) : null,
         pages: body.pages ? Number(body.pages) : null,
+        rating: body.rating ? Number(body.rating) : null,
+        status: body.status || "QUERO_LER",
         genreId: body.genreId || null,
+        cover: body.cover?.trim() || null,
+        synopsis: body.synopsis?.trim() || null,
       },
     });
 
