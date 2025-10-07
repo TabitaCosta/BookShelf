@@ -29,7 +29,7 @@ export default function EditBookForm({ book, genres }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...formData,
-          genreId: formData.genreId ? Number(formData.genreId) : undefined,
+          genreId: formData.genreId || undefined,
           year: formData.year ? Number(formData.year) : undefined,
           pages: formData.pages ? Number(formData.pages) : undefined,
           rating: formData.rating ? Number(formData.rating) : undefined,
